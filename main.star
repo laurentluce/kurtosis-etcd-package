@@ -35,5 +35,5 @@ def run(plan, args):
     )
     plan.wait(recipe = check_etcdctl, field = "code", assertion = "==", target_value = 0, timeout = "1m", service_name = ETCD_SERVICE_NAME)
 
-    return {"service-name": ETCD_SERVICE_NAME, "endpoint": "{}:{}".format(etcd.hostname, ETCD_CLIENT_PORT_NUMBER)}
+    return {"service-name": ETCD_SERVICE_NAME, "endpoint": "{}:{}".format(etcd.ip_address, ETCD_CLIENT_PORT_NUMBER)}
 
