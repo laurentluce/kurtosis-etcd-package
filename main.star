@@ -33,7 +33,7 @@ def run(plan, args):
     check_etcdctl = ExecRecipe(
         command = ["etcdctl", "get", "test"],
     )
-    plan.wait(recipe = check_etcdctl, field = "code", assertion = "==", target_value = 0, timeout = "8m", service_name = ETCD_SERVICE_NAME)
+    plan.wait(recipe = check_etcdctl, field = "code", assertion = "==", target_value = 0, timeout = "1m", service_name = ETCD_SERVICE_NAME)
 
-    return {"service-name": ETCD_SERVICE_NAME, "hostname": etcd.hostname}
+    return {"service-name": ETCD_SERVICE_NAME, "endpoint": "{}:{}".format(etcd.hostname, ETCD_CLIENT_PORT_NUMBER)}
 
