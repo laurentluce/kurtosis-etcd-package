@@ -19,23 +19,17 @@ def run(plan, args):
             "ETCD_LISTEN_CLIENT_URLS": "http://0.0.0.0:{}".format(ETCD_CLIENT_PORT_NUMBER),
             "ETCD_ADVERTISE_CLIENT_URLS": "http://0.0.0.0:{}".format(ETCD_CLIENT_PORT_NUMBER),
         },
-        # Check condition here once ExecRecipe is supported
-        #ready_conditions = ReadyCondition(
-        #    recipe = ExecRecipe(
-        #        command = ["etcdctl", "get", "test"]
-        #    ),
-        #    field = "code",
-        #    assertion = "==",
-        #    target_value = 0
-        #)
+        ready_conditions = ReadyCondition(
+            recipe = ExecRecipe(
+                command = ["etcdctl", "get", "test"]
+            ),
+            field = "code",
+            assertion = "==",
+            target_value = 0
+        )
     )
 
     etcd = plan.add_service(name = ETCD_SERVICE_NAME, config = etcd_service_config)
-
-    check_etcdctl = ExecRecipe(
-        command = ["etcdctl", "get", "test"],
-    )
-    plan.wait(recipe = check_etcdctl, field = "code", assertion = "==", target_value = 0, timeout = "1m", service_name = ETCD_SERVICE_NAME)
 
     return {"service-name": ETCD_SERVICE_NAME, "hostname": etcd.hostname, "port": ETCD_CLIENT_PORT_NUMBER}
 
